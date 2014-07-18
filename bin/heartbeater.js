@@ -231,7 +231,7 @@ function markDirty() {
 }
 
 var updateSampleAttempts = 0;
-var updateSampleAttemptsMax = 5;
+var updateSampleAttemptsMax = 10;
 
 function gatherDiskUsage(vms, callback) {
     // 1) the sum of the disk used by the kvm VMs' zvols' volsizes

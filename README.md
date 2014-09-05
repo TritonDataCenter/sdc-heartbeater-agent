@@ -8,22 +8,21 @@
     Copyright (c) 2014, Joyent, Inc.
 -->
 
-# Joyent Engineering Guide
+# Heartbeater Agent
 
-Repository: <git@git.joyent.com:eng.git>
-Browsing: <https://mo.joyent.com/eng>
-Who: Trent Mick, Dave Pacheco
-Docs: <https://mo.joyent.com/docs/eng>
-Tickets/bugs: <https://devhub.joyent.com/jira/browse/TOOLS>
+Repository: <git@github.com:joyent/sdc-heartbeater.git>
+Browsing: <https://mo.joyent.com/heartbeater>
+Who: Orlando Vazquez
+Docs: <https://mo.joyent.com/docs/heartbeater>
+Tickets/bugs: <https://devhub.joyent.com/jira/browse/AGENTS>
 
 
 # Overview
 
-This repo serves two purposes: (1) It defines the guidelines and best
-practices for Joyent engineering work (this is the primary goal), and (2) it
-also provides boilerplate for an SDC project repo, giving you a starting
-point for many of the suggestion practices defined in the guidelines. This is
-especially true for node.js-based REST API projects.
+The Smart Datacenter Hearbeater Agent (or heartbeater, for short) is a
+process which runs on all SDC nodes and periodically emits to AMQP a object
+containing usage and status information.
+
 
 Start with the guidelines: <https://mo.joyent.com/docs/eng>
 
@@ -50,40 +49,14 @@ Start with the guidelines: <https://mo.joyent.com/docs/eng>
 
 To run the boilerplate API server:
 
-    git clone git@git.joyent.com:eng.git
-    cd eng
+    git clone git@github.com:joyent/sdc-heartbeater-agent.git
+    cd sdc-heartbeater-agent
     git submodule update --init
     make all
-    node server.js
+    node bin/heartbeater.js
 
 To update the guidelines, edit "docs/index.restdown" and run `make docs`
 to update "docs/index.html".
 
 Before commiting/pushing run `make prepush` and, if possible, get a code
 review.
-
-
-
-# Testing
-
-    make test
-
-If you project has setup steps necessary for testing, then describe those
-here.
-
-
-# Starting a Repo Based on eng.git
-
-Create a new repo called "some-cool-fish" in your "~/work" dir based on "eng.git":
-Note: run this inside the eng dir.
-
-    ./tools/mkrepo $HOME/work/some-cool-fish
-
-
-# Your Other Sections Here
-
-Add other sections to your README as necessary. E.g. Running a demo, adding
-development data.
-
-
-

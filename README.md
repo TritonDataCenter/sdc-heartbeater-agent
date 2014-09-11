@@ -10,7 +10,7 @@
 
 # Heartbeater Agent
 
-Repository: <git@github.com:joyent/sdc-heartbeater.git>
+Repository: <git@github.com:joyent/sdc-heartbeater-agent.git>
 Browsing: <https://mo.joyent.com/heartbeater>
 Who: Orlando Vazquez
 Docs: <https://mo.joyent.com/docs/heartbeater>
@@ -20,11 +20,9 @@ Tickets/bugs: <https://devhub.joyent.com/jira/browse/AGENTS>
 # Overview
 
 The Smart Datacenter Hearbeater Agent (or heartbeater, for short) is a
-process which runs on all SDC nodes and periodically emits to AMQP a object
-containing usage and status information.
+process which runs on all SDC nodes and periodically emits to AMQP an object
+containing usage and status information for the server on which its run.
 
-
-Start with the guidelines: <https://mo.joyent.com/docs/eng>
 
 
 # Repository

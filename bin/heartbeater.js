@@ -307,8 +307,8 @@ function gatherDiskUsage(vms, callback) {
                     Zone.get(uuid, function (error, zone) {
                         if (error) {
                             console.error(
-                                "Error looking up zone " + uuid + " by uuid"
-                                + error.message + "\n"
+                                'Error looking up zone ' + uuid + ' by uuid'
+                                + error.message + '\n'
                                 + error.stack);
                             fecb();
                             return;

@@ -436,8 +436,7 @@ function gatherDiskUsage(vms, callback) {
                 usage.kvm_quota_used_bytes +
                 usage.zone_quota_used_bytes +
                 usage.cores_quota_used_bytes +
-                usage.installed_images_used_bytes
-            );
+                usage.installed_images_used_bytes);
 
             cb();
         }

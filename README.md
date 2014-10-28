@@ -17,7 +17,10 @@ contribution guidelines, issues, and general documentation, visit the
 
 ## Overview
 
-SDC Heartbeater Agent is the compute node health service running on all compute nodes. It periodically emits to AMQP an object containing health status information for the server on which it's run.
+SDC Heartbeater Agent is the resources status service running on
+all compute nodes. It periodically emits to AMQP an object containing
+current usage information on cores, memory and disk for the instances and images
+of a server on which the service is run.
 
 
 ## Development

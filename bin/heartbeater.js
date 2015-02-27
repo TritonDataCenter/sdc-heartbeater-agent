@@ -73,28 +73,6 @@ process.on('uncaughtException', function (e) {
 });
 
 
-// Don't run heartbeater if vm-agent is up and running
-var vmAgentConfig;
-var vmAgentConfigPath = '/opt/smartdc/agents/etc/vm-agent.config.json';
-
-if (fs.existsSync(vmAgentConfigPath)) {
-    try {
-        vmAgentConfig = require(vmAgentConfigPath);
-        if (vmAgentConfig.no_rabbit) {
-            console.warn('"no_rabbit" flag is true for vm-agent, ' +
-                'heartbeater agent will now sleep');
-            // http://nodejs.org/docs/latest/api/all.html#all_settimeout_cb_ms
-            // ...The timeout must be in the range of 1-2,147,483,647 inclusive
-            setInterval(function () {}, 2000000000);
-            return;
-        }
-    } catch (e) {
-        console.warn('Error parsing vm-agent config: "%s". Will now continue ' +
-            'running heartbeater agent', e.message);
-    }
-}
-
-
 function amqpConfig(callback) {
     execFile('/usr/node/bin/node',
         [ '/opt/smartdc/agents/bin/amqp-config' ],
@@ -171,19 +149,6 @@ function connect() {
         connection.reconnect();
     });
 }
-
-execFile(
-    '/usr/bin/kstat',
-    [ '-p', '-m', 'unix', '-n', 'system_misc', '-s', 'boot_time'],
-    function (error, stdout, stderr) {
-        if (error) {
-            throw error;
-        }
-        boot_time = parseInt(stdout.toString().split(/\s+/)[1], 10);
-
-        // Connect now!
-        connect();
-    });
 
 function setupPingQueue(uuid) {
     var resource = 'heartbeat';
@@ -757,4 +722,43 @@ function loadSysinfo(callback) {
             undefined, exitStatus,
             stdout.toString().trim(), stderr.toString().trim());
     });
+}
+
+
+// Don't run heartbeater if vm-agent is up and running
+var vmAgentConfig;
+var vmAgentConfigPath = '/opt/smartdc/agents/etc/vm-agent.config.json';
+
+if (fs.existsSync(vmAgentConfigPath)) {
+    try {
+        vmAgentConfig = require(vmAgentConfigPath);
+        if (vmAgentConfig.no_rabbit) {
+            console.warn('"no_rabbit" flag is true for vm-agent, ' +
+                'heartbeater agent will now sleep');
+            // http://nodejs.org/docs/latest/api/all.html#all_settimeout_cb_ms
+            // ...The timeout must be in the range of 1-2,147,483,647 inclusive
+            setInterval(function () {}, 2000000000);
+        }
+    } catch (e) {
+        console.warn('Error parsing vm-agent config: "%s". Will now continue ' +
+            'running heartbeater agent', e.message);
+        runHeartbeater();
+    }
+} else {
+    runHeartbeater();
+}
+
+function runHeartbeater() {
+    execFile(
+        '/usr/bin/kstat',
+        [ '-p', '-m', 'unix', '-n', 'system_misc', '-s', 'boot_time'],
+        function (error, stdout, stderr) {
+            if (error) {
+                throw error;
+            }
+            boot_time = parseInt(stdout.toString().split(/\s+/)[1], 10);
+
+            // Connect now!
+            connect();
+        });
 }

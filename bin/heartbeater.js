@@ -732,18 +732,18 @@ var vmAgentConfigPath = '/opt/smartdc/agents/etc/vm-agent.config.json';
 if (fs.existsSync(vmAgentConfigPath)) {
     try {
         vmAgentConfig = require(vmAgentConfigPath);
-        if (vmAgentConfig.no_rabbit) {
-            console.warn('"no_rabbit" flag is true for vm-agent, ' +
-                'heartbeater agent will now sleep');
-            // http://nodejs.org/docs/latest/api/all.html#all_settimeout_cb_ms
-            // ...The timeout must be in the range of 1-2,147,483,647 inclusive
-            setInterval(function () {}, 2000000000);
-        }
     } catch (e) {
         console.warn('Error parsing vm-agent config: "%s". Will now continue ' +
             'running heartbeater agent', e.message);
-        runHeartbeater();
     }
+}
+
+if (vmAgentConfig && vmAgentConfig.no_rabbit) {
+    console.warn('"no_rabbit" flag is true for vm-agent, ' +
+        'heartbeater agent will now sleep');
+    // http://nodejs.org/docs/latest/api/all.html#all_settimeout_cb_ms
+    // ...The timeout must be in the range of 1-2,147,483,647 inclusive
+    setInterval(function () {}, 2000000000);
 } else {
     runHeartbeater();
 }

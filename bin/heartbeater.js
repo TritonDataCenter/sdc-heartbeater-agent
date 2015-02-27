@@ -72,6 +72,29 @@ process.on('uncaughtException', function (e) {
     console.log(e.stack);
 });
 
+
+// Don't run heartbeater if vm-agent is up and running
+var vmAgentConfig;
+var vmAgentConfigPath = '/opt/smartdc/agents/etc/vm-agent.config.json';
+
+if (fs.existsSync(vmAgentConfigPath)) {
+    try {
+        vmAgentConfig = require(vmAgentConfigPath);
+        if (vmAgentConfig.no_rabbit) {
+            console.warn('"no_rabbit" flag is true for vm-agent, ' +
+                'heartbeater agent will now sleep');
+            // http://nodejs.org/docs/latest/api/all.html#all_settimeout_cb_ms
+            // ...The timeout must be in the range of 1-2,147,483,647 inclusive
+            setInterval(function () {}, 2000000000);
+            return;
+        }
+    } catch (e) {
+        console.warn('Error parsing vm-agent config: "%s". Will now continue ' +
+            'running heartbeater agent', e.message);
+    }
+}
+
+
 function amqpConfig(callback) {
     execFile('/usr/node/bin/node',
         [ '/opt/smartdc/agents/bin/amqp-config' ],

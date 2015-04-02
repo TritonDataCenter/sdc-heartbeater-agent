@@ -20,7 +20,7 @@ set -o xtrace
 
 
 function setup_logadm {
-    logadm -w vm_agent_logs -C 168 -S 1g -c -p 1h \
+    logadm -w heartbeater_logs -C 168 -S 1g -c -p 1h \
         -t '/var/log/sdc/upload/heartbeater_$nodename_%FT%H:%M:%S.log' \
         /var/svc/log/*heartbeater*.log
 

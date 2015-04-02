@@ -6,11 +6,12 @@
 #
 
 #
-# Copyright (c) 2014, Joyent, Inc.
+# Copyright (c) 2015, Joyent, Inc.
 #
 
 set -o xtrace
 DIR=`dirname $0`
+ROOT=$(cd `dirname $0`/.. && pwd)
 
 . /lib/sdc/config.sh
 
@@ -31,9 +32,12 @@ subfile () {
   OUT=$2
   sed -e "s#@@PREFIX@@#$PREFIX#g" \
       -e "s/@@VERSION@@/$VERSION/g" \
+      -e "s#@@ROOT@@#$ROOT#g" \
       -e "s/@@ENABLED@@/$ENABLED/g" \
       $IN > $OUT
 }
 
-subfile "$DIR/../smf/manifests/heartbeater.xml.in" "$SMF_DIR/heartbeater.xml"
+subfile "$ROOT/smf/method/heartbeater.in" "$ROOT/smf/method/heartbeater"
+subfile "$ROOT/smf/manifests/heartbeater.xml.in" "$SMF_DIR/heartbeater.xml"
+chmod +x "$ROOT/smf/method/heartbeater"
 svccfg import $SMF_DIR/heartbeater.xml

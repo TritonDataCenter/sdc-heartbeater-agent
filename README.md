@@ -8,6 +8,8 @@
     Copyright (c) 2014, Joyent, Inc.
 -->
 
+**Note: This repository is no longer used by Triton.**
+
 # SDC Heartbeater Agent
 
 This repository is part of the SmartDataCenter (SDC) project. For
